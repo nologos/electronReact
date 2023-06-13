@@ -1,0 +1,23 @@
+body {
+  background-color: #3f3f3f;
+  font-family: Arial, sans-serif;
+}
+
+#app {
+  text-align: center;
+  margin-top: 100px;
+}
+
+h1 {
+  color: #e3e3e3;
+}
+h2 {
+  color: #e3e3e3;
+}
+h3 {
+  color: #e3e3e3;
+}
+
+p {
+  color: #e3e3e3;
+}
