@@ -1,6 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import Count from "./components/Count";
+const React = require("react");
+const ReactDOM = require("react-dom/client");
+const Count = require("./components/Count").default;
 
 document.addEventListener("DOMContentLoaded", () => {
   const messageElement = document.getElementById("message");

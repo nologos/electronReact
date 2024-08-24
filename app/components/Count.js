@@ -1,6 +1,8 @@
 // this is an example react component that renders every second to show how many times it has rendered
 
-import React, { useState, useEffect } from "react";
+const React = require('react');
+const { useState, useEffect } = React;
+
 // these are the basic imports you need for a react component
 
 const Count = () => {
