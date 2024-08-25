@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const packager = require("@electron/packager");
 const convertToWindowsStore = require("electron-windows-store");
@@ -7,17 +8,45 @@ const asar = require("@electron/asar");
 const projectRoot = process.cwd();
 const asarlock = path.join(projectRoot, "build", "out", "appx", "pre-appx", "app", "resources", "app.asar");
 const folder = path.join(projectRoot, "build", "out", "asarcontent");
+const pkg = require("../package.json");
 
 const APPNAME_ = process.env.npm_package_name;
 const VERSION_ = process.env.npm_package_version;
+const desiredfiles = pkg.desiredFiles;
 
-async function packer() {
-  const everythingexpectapp = await function getdesiredfiles() {
-    // getallfilesinroot
+/*
+getdesiredFiles uses packer ignore option to filter out undesired files.
+Current implementation allows the selection/deselection of files and folders from the root dir
+to customize what files you want in your packaged app specify new in package.json property
 
-    // return ["node_modules", "build", "out", "appx", "files", "sample-dev.pfx"];
-    return filearay;
-  };
+package.json and the main file defined within are mandatory ("main": "app/main.js",). Example: 
+"desiredFiles": [
+  "node_modules",
+  "package.json",
+  "app"
+],
+
+*/
+
+const listFilesAndFoldersSync = (dir) => {
+  try {
+    return fs.readdirSync(dir).map((file) => file); // Collect results in an array
+  } catch (err) {
+    console.error("Error reading directory:", err);
+    return [];
+  }
+};
+
+async function getdesiredFiles(desiredFiles) {
+  const rootDir = process.cwd();
+  const allFileList = listFilesAndFoldersSync(rootDir);
+  const everythingExceptDesired = allFileList.filter((item) => !desiredFiles.includes(item));
+  return everythingExceptDesired;
+}
+
+async function packer(desiredFiles = ["node_modules", "package.json", "app"]) {
+  console.log("===================desiredFiles===================");
+  console.log("packaging only desired root files, if file not in the desired adjust build/build.js");
   options = {
     dir: path.resolve("."),
     overwrite: true,
@@ -28,7 +57,7 @@ async function packer() {
     out: path.resolve(__dirname, "out"),
     name: APPNAME_,
     appVersion: VERSION_,
-    ignore: everythingexpectapp(),
+    ignore: await getdesiredFiles(desiredFiles),
   };
   console.log("===================options");
   console.log(options);
@@ -84,10 +113,10 @@ async function asarextract() {
   console.log("done.");
 }
 
-async function piii() {
-  const appPaths = await packer(); // \build\out\exampleapplication-win32-x64
-  // await bundleElectronApp(appPaths);
-  // await asarextract();
+async function packAndbuildForWindows() {
+  const appPaths = await packer(desiredfiles); // \build\out\exampleapplication-win32-x64
+  await bundleElectronApp(appPaths);
+  await asarextract();
 }
 
-piii();
+packAndbuildForWindows();

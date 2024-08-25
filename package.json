@@ -3,6 +3,11 @@
   "version": "1.0.0.0",
   "description": "example application description",
   "main": "app/main.js",
+  "desiredFiles": [
+    "node_modules",
+    "package.json",
+    "app"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron ./public/main.js",
