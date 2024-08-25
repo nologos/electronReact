@@ -1,12 +1,13 @@
 {
   "name": "exampleapplication",
-  "version": "1.0.0.0",
+  "version": "1.0.0.2",
   "description": "example application description",
-  "main": "app/main.js",
+  "main": "public/main.js",
   "desiredFiles": [
     "node_modules",
     "package.json",
-    "app"
+    "app",
+    "public"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
